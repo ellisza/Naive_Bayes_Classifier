@@ -61,12 +61,6 @@ df.expGain = df.expGain.str.replace(',','').astype('float')
 df.winPercent = df.winPercent.str.replace(',','').astype('float')
 #%%
 df.head()
-# %%
-# Save to csv 
-df.to_csv(r'hotsData.csv', index=False, header=True) # saves to local working directory
-
-#%%
-df = pd.read_csv('hotsData.csv') # reload from file in local working directory
 #%%
 # add roles column
 for index, row in df.iterrows():
@@ -93,6 +87,21 @@ testData.head()
 #%%
 testDataFix = testData.convert_dtypes()
 testDataFix = testDataFix.astype({'healing': 'Float64'}).dtypes
+
+#%%
+ #####################################
+
+ # Start from here, all above is data setup and cleanup
+ 
+ ####################################
+
+
+#%%
+# Save to csv 
+df.to_csv(r'hotsData.csv', index=False, header=True) # saves to local working directory
+
+#%%
+df = pd.read_csv('hotsData.csv') # reload from file in local working directory
 
 #%%
 xtrain = df.drop(['roles', 'hero'], axis=1)

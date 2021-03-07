@@ -15,7 +15,7 @@ import seaborn as sns; sns.set()
 html = requests.get(
     'https://www.hotslogs.com/Sitewide/ScoreResultStatistics?Tab2=roleTabBruiser'
 )
-soup = BeautifulSoup(html.text, 'html5lib')
+soup = BeautifulSoup(html.text, 'html.parser')
 
 # %%
 # sift the the html table to get the rows and columns
@@ -82,12 +82,18 @@ for index, row in df.iterrows():
 df.head(30)
 #%%
 
-testData = df.drop(['hero','roles'], axis=1)
+testData = df
 testData.head()
 #%%
 testDataFix = testData.convert_dtypes()
-testDataFix = testDataFix.astype({'healing': 'Float64'}).dtypes
+testDataFix['healing'] = testDataFix['healing'].str.replace(',', '')
+testDataFix['damageTaken'] = testDataFix['damageTaken'].str.replace(',', '')
+testDataFix['winPercent'] = testDataFix['winPercent'].str.replace('%', '')
 
+testDataFix['healing'] = pd.to_numeric(testDataFix['healing'],errors='coerce')
+testDataFix['damageTaken'] = pd.to_numeric(testDataFix['damageTaken'],errors='coerce')
+testDataFix['winPercent'] = pd.to_numeric(testDataFix['winPercent'],errors='coerce')
+testDataFix.head
 #%%
  #####################################
 
@@ -102,13 +108,35 @@ df.to_csv(r'hotsData.csv', index=False, header=True) # saves to local working di
 
 #%%
 df = pd.read_csv('hotsData.csv') # reload from file in local working directory
+df.head
+testDataFix.head
 
+df['healing'] = df['healing'].str.replace(',', '')
+df['damageTaken'] = df['damageTaken'].str.replace(',', '')
+df['winPercent'] = df['winPercent'].str.replace('%', '')
+
+df['healing'] = pd.to_numeric(df['healing'],errors='coerce')
+df['damageTaken'] = pd.to_numeric(df['damageTaken'],errors='coerce')
+df['winPercent'] = pd.to_numeric(df['winPercent'],errors='coerce')
+
+df.healing = df.healing.astype('float')
+df.damageTaken = df.damageTaken.astype('float')
+df.winPercent = df.winPercent.astype('float')
+
+df['healing'] = df['healing'].fillna(0)
+df['damageTaken'] = df['damageTaken'].fillna(0)
+df['winPercent'] = df['winPercent'].fillna(0)
+
+testDataFix['healing'] = testDataFix['healing'].fillna(0)
+testDataFix['damageTaken'] = testDataFix['damageTaken'].fillna(0)
+testDataFix['winPercent'] = testDataFix['winPercent'].fillna(0)
 #%%
-xtrain = df.drop(['roles', 'hero'], axis=1)
+
+xtrain = df.drop(['hero', 'roles'], axis=1)
 ytrain = df.loc[:,'roles']
 
-xtest = testData.drop('roles', axis=1)
-ytest = testData.loc[:,'roles']
+xtest = testDataFix.drop(['hero', 'roles'], axis=1)
+ytest = testDataFix.loc[:,'roles']
 
 # %%
 model = GaussianNB()
@@ -126,4 +154,4 @@ plt.ylabel('Predicted')
 # %%
 testData = pd.read_csv('testData.csv') # reload from file in local working directory
 #%%
-testData.dtypes
+

@@ -11,21 +11,20 @@ import seaborn as sns; sns.set()
 
 # %%
 # Import data
-training = pd.read_csv("https://raw.githubusercontent.com/selva86/datasets/master/har_train.csv")
-test =  pd.read_csv("https://raw.githubusercontent.com/selva86/datasets/master/har_validate.csv")
+training = pd.read_csv("WearableComputing_weight_lifting_exercises_biceps_curl_variations.csv")
 
 # %%
-# Mess with data 
+# Clean with data 
 
-print(training.head)
 
 # %% 
 # Create the X and Y
-xtrain = training.drop('classe', axis=1)
-ytrain = training.loc[:, 'classe']
+xtrain = training.drop(training.columns[[0,1,2,3,4,5]], axis=1)
+ytrain = training.loc[:, 'num_window']
 
-xtest = test.drop('classe', axis=1)
-ytest = test.loc[:, 'classe']
+xtest = test.drop(test.columns[[0,1,2,3,4,5]], axis=1)
+ytest = test.loc[:, 'num_window']
+
 # %%
 # Init the Gaussian Classifier
 model = GaussianNB()

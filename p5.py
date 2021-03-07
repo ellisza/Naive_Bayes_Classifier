@@ -107,8 +107,8 @@ df = pd.read_csv('hotsData.csv') # reload from file in local working directory
 xtrain = df.drop(['roles', 'hero'], axis=1)
 ytrain = df.loc[:,'roles']
 
-xtest = df.drop(['roles', 'hero'], axis=1)
-ytest = df.loc[:,'roles']
+xtest = testData.drop('roles', axis=1)
+ytest = testData.loc[:,'roles']
 
 # %%
 model = GaussianNB()
@@ -124,3 +124,6 @@ sns.heatmap(mat, square=True, annot=True, fmt='d', cbar=False, xticklabels=names
 plt.xlabel('Truth')
 plt.ylabel('Predicted')
 # %%
+testData = pd.read_csv('testData.csv') # reload from file in local working directory
+#%%
+testData.dtypes

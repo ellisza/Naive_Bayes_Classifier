@@ -154,4 +154,27 @@ plt.ylabel('Predicted')
 # %%
 testData = pd.read_csv('testData.csv') # reload from file in local working directory
 #%%
+# Wins and Losses GaussianNB Classifier
+wlTrain = pd.read_csv('winLossTrain.csv')
+wlTest = pd.read_csv('winLossTest.csv')
+# %%
+# Train and classify
+xtrain = wlTrain.drop(['classe'], axis=1)
+ytrain = wlTrain.loc[:,'classe']
 
+xtest = wlTest.drop(['classe'], axis=1)
+ytest = wlTest.loc[:,'classe']
+
+# %%
+model = GaussianNB()
+# %%
+model.fit(xtrain, ytrain)
+# %%
+pred = model.predict(xtest)
+print(pred)
+#%%
+mat = confusion_matrix(pred, ytest)
+names = np.unique(pred)
+sns.heatmap(mat, square=True, annot=True, fmt='d', cbar=False, xticklabels=names, yticklabels=names)
+plt.xlabel('Truth')
+plt.ylabel('Predicted')

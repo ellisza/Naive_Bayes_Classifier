@@ -178,3 +178,5 @@ names = np.unique(pred)
 sns.heatmap(mat, square=True, annot=True, fmt='d', cbar=False, xticklabels=names, yticklabels=names)
 plt.xlabel('Truth')
 plt.ylabel('Predicted')
+
+# %%
